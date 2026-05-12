@@ -1,5 +1,28 @@
-# Faça um fork desse repositório
+# Casa do Código — Desafio Jornada Dev Eficiente
 
-Este é um repositório vazio de propósito. A ideia é que você faça um fork para que eu, Alberto, possa usar o github para ter a chance de olhar vários dos códigos produzido por você e seus(as) colegas da Jornada Dev Eficiente :). 
+Implementação do desafio da livraria **Casa do Código** proposto pelo Alberto na Jornada Dev Eficiente. O objetivo é construir uma API REST completa de forma incremental
 
-Durante cada uma das seis semanas eu vou pegar código por amostragem e analisar. Feito isso, vou criar um vídeo anonimizando a pessoa que é dona do código, com as minhas observações e postar isso como material de suporte da funcionalidade :). 
+---
+
+## Pré-requisitos
+
+- Go 1.22+
+- Copiar `.env.sample` para `.env` e ajustar as variáveis se necessário
+
+## Aplicação web
+
+```bash
+make build   # compila o binário em bin/api
+make start   # compila e sobe a API
+```
+
+A API sobe por padrão em `http://localhost:8080`.
+
+## Ferramenta de métricas (dev)
+
+Analisa a complexidade dos arquivos `.go` do projeto e gera um relatório.
+
+```bash
+make build-cdd      # compila o binário em bin/metrics
+make start-analyser # compila e roda o analisador
+```
