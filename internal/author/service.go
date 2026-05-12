@@ -1,8 +1,12 @@
 package author
 
-// 4 ICP Points
+// 6 ICP Points
 
-import "context"
+import (
+	"context"
+
+	"github.com/fbsarracini/seed-desafio-cdc/internal/author/validation"
+)
 
 type AuthorService struct {
 	// 1
@@ -24,6 +28,17 @@ func (s *AuthorService) Create(ctx context.Context, req CreateRequest) ([]string
 	// 1
 	if errs := s.validator.Validate(req); len(errs) > 0 {
 		return errs, nil
+	}
+
+	exists, err := s.repository.EmailExists(ctx, req.Email)
+	// 1
+	if err != nil {
+		return nil, err
+	}
+
+	// 1
+	if exists {
+		return []string{validation.ErrorEmailAlreadyExists.Error()}, nil
 	}
 
 	// 1
