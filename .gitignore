@@ -1,0 +1,37 @@
+# =========================
+# Go
+# =========================
+bin/
+build/
+dist/
+
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+coverage.out
+*.coverprofile
+
+# Go workspace
+go.work
+go.work.sum
+
+# Dependency directory (optional)
+vendor/
+
+# =========================
+# Environment
+# =========================
+.env
+.env.local
+.env.*.local
+
+# =========================
+# Logs
+# =========================
+*.log
+tmp/
+temp/
