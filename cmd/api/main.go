@@ -37,7 +37,7 @@ func main() {
 	// registra rota POST /authors
 	mux.Handle("POST /authors", author.CreateHandler(db))
 
-	// Configura o servidor HTTP com timeouts
+	// configura o servidor HTTP com timeouts
 	srv := &http.Server{
 		Addr:         cfg.Addr,
 		Handler:      mux,
