@@ -97,8 +97,8 @@ func TestHandler_EmailDuplicado(t *testing.T) {
 	w2 := httptest.NewRecorder()
 	h.ServeHTTP(w2, second)
 
-	if w2.Code != http.StatusBadRequest {
-		t.Errorf("segunda criacao: status = %d, want 400", w2.Code)
+	if w2.Code != http.StatusConflict {
+		t.Errorf("segunda criacao: status = %d, want 409", w2.Code)
 	}
 
 	var resp ErrorResponse
