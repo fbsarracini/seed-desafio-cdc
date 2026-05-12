@@ -35,9 +35,7 @@ func main() {
 	mux := http.NewServeMux()
 
 	// registra rota POST /authors
-	// author.CreateHandler(db) é a FACTORY FUNCTION que cria o handler
-	// retorna uma http.HandlerFunc
-	mux.HandleFunc("POST /authors", author.CreateHandler(db))
+	mux.Handle("POST /authors", author.CreateHandler(db))
 
 	// Configura o servidor HTTP com timeouts
 	srv := &http.Server{
