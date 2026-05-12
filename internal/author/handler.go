@@ -1,30 +1,32 @@
 package author
 
-// 6 ICP Points
+// 7 ICP Points
 
 import (
 	"database/sql"
 	"encoding/json"
+	"errors"
 	"net/http"
+
+	"github.com/fbsarracini/seed-desafio-cdc/internal/author/validation"
 )
 
-// Handler implementa o handler HTTP para criar autores
 type Handler struct {
+	// 1
+	validator *CreateRequestValidator
 	// 1
 	service *AuthorService
 }
 
-// CreateHandler é a factory function que cria um handler completo com suas dependências
 func CreateHandler(db *sql.DB) http.Handler {
 	// 1
 	repository := NewAuthorRepository(db)
 	service := NewAuthorService(repository)
-	return &Handler{service: service}
+	validator := NewCreateRequestValidator()
+	return &Handler{service: service, validator: validator}
 }
 
-// ServeHTTP processa a requisição HTTP
 func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-
 	// 1
 	var req CreateRequest
 	// 1
@@ -33,15 +35,20 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	validationErrs, err := h.service.Create(r.Context(), req)
-
 	// 1
-	if len(validationErrs) > 0 {
-		h.respondWithErrors(w, validationErrs)
+	if errs := h.validator.Validate(req); len(errs) > 0 {
+		h.respondWithErrors(w, errs)
 		return
 	}
 
+	err := h.service.Create(r.Context(), req)
+
 	// 1
+	if errors.Is(err, validation.ErrorEmailAlreadyExists) {
+		h.respondWithErrors(w, []string{err.Error()})
+		return
+	}
+
 	if err != nil {
 		http.Error(w, "Internal server error", http.StatusInternalServerError)
 		return

@@ -1,6 +1,6 @@
 package author
 
-// 6 ICP Points
+// 4 ICP Points
 
 import (
 	"context"
@@ -10,41 +10,29 @@ import (
 
 type AuthorService struct {
 	// 1
-	validator *CreateRequestValidator
-	// 1
 	repository *AuthorRepository
 }
 
-// construtor
 func NewAuthorService(repository *AuthorRepository) *AuthorService {
-	return &AuthorService{
-		validator:  NewCreateRequestValidator(),
-		repository: repository,
-	}
+	return &AuthorService{repository: repository}
 }
 
-func (s *AuthorService) Create(ctx context.Context, req CreateRequest) ([]string, error) {
-
-	// 1
-	if errs := s.validator.Validate(req); len(errs) > 0 {
-		return errs, nil
-	}
-
+func (s *AuthorService) Create(ctx context.Context, req CreateRequest) error {
 	exists, err := s.repository.EmailExists(ctx, req.Email)
 	// 1
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	// 1
 	if exists {
-		return []string{validation.ErrorEmailAlreadyExists.Error()}, nil
+		return validation.ErrorEmailAlreadyExists
 	}
 
 	// 1
 	if err := s.repository.Create(ctx, req); err != nil {
-		return nil, err
+		return err
 	}
 
-	return nil, nil
+	return nil
 }
