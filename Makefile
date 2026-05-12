@@ -1,6 +1,6 @@
 BIN_DIR := bin
 
-.PHONY: build build-cdd start start-analyser
+.PHONY: build build-cdd start start-analyser test cover
 
 build:
 	go build -o $(BIN_DIR)/api ./cmd/api/...
@@ -13,3 +13,10 @@ start: build
 
 start-analyser: build-cdd
 	./$(BIN_DIR)/metrics
+
+test:
+	go test ./internal/author/... -coverprofile=coverage.out
+	go tool cover -func=coverage.out
+
+cover: test
+	go tool cover -html=coverage.out
